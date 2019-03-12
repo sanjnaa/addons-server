@@ -13,7 +13,6 @@ from olympia.addons.models import Addon, Category
 from olympia.amo.decorators import json_view
 from olympia.amo.templatetags.jinja_helpers import locale_url, urlparams
 from olympia.amo.utils import render, sorted_groupby
-from olympia.browse.views import personas_listing as personas_listing_view
 from olympia.versions.compare import dict_from_int, version_dict, version_int
 
 from .forms import ESSearchForm
@@ -22,52 +21,6 @@ from .forms import ESSearchForm
 DEFAULT_NUM_PERSONAS = 21  # Results appear in a grid of 3 personas x 7 rows.
 
 log = olympia.core.logger.getLogger('z.search')
-
-
-def _personas(request):
-    """Handle the request for persona searches."""
-
-    initial = dict(request.GET.items())
-
-    # Ignore these filters since return the same results for Firefox
-    # as for Thunderbird, etc.
-    initial.update(appver=None, platform=None)
-
-    form = ESSearchForm(initial, type=amo.ADDON_PERSONA)
-    form.is_valid()
-
-    qs = Addon.search_public()
-    filters = ['sort']
-    mapping = {
-        'downloads': '-weekly_downloads',
-        'users': '-average_daily_users',
-        'rating': '-bayesian_rating',
-        'created': '-created',
-        'name': 'name.raw',
-        'updated': '-last_updated',
-        'hotness': '-hotness'}
-    results = _filter_search(request, qs, form.cleaned_data, filters,
-                             sorting=mapping,
-                             sorting_default='-average_daily_users',
-                             types=[amo.ADDON_PERSONA])
-
-    form_data = form.cleaned_data.get('q', '')
-
-    search_opts = {}
-    search_opts['limit'] = form.cleaned_data.get('pp', DEFAULT_NUM_PERSONAS)
-    page = form.cleaned_data.get('page') or 1
-    search_opts['offset'] = (page - 1) * search_opts['limit']
-
-    pager = amo.utils.paginate(request, results, per_page=search_opts['limit'])
-    categories, filter, base, category = personas_listing_view(request)
-    context = {
-        'pager': pager,
-        'form': form,
-        'categories': categories,
-        'query': form_data,
-        'filter': filter,
-        'search_placeholder': 'themes'}
-    return render(request, 'search/personas.html', context)
 
 
 class BaseAjaxSearch(object):
@@ -338,9 +291,6 @@ def search(request, tag_name=None):
     form_data = form.cleaned_data
     if tag_name:
         form_data['tag'] = tag_name
-
-    if category == 'themes' or form_data.get('atype') == amo.ADDON_PERSONA:
-        return _personas(request)
 
     sort, extra_sort = split_choices(form.sort_choices, 'created')
     if form_data.get('atype') == amo.ADDON_SEARCH:
