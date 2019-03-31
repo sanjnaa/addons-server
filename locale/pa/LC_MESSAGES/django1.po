@@ -20,3 +20,18 @@ msgstr "WebExtensions API ਦੇ ਨਾਲ, ਐਕਸਟੈਂਸ਼ਨਾਂ �
 
 msgid "Please make sure to report any linting related issues on GitHub."
 msgstr "ਕਿਰਪਾ ਕਰਕੇ ਯਕੀਨੀ ਬਣਾਉ ਕਿ GitHub ਤੇ ਕਿਸੇ ਸਤਰ ਸਬੰਧਿਤ ਮੁੱਦਿਆਂ ਦੀ ਰਿਪੋਰਟ ਕਰੋ|"
+
+msgid "Get Involved"
+msgstr "ਸ਼ਾਮਲ ਕਰੋ"
+
+msgid "Blog"
+msgstr "ਬਲੌਗ"
+
+msgid "About Us"
+msgstr "ਸਾਡੇ ਬਾਰੇ"
+
+msgid "Who We Are"
+msgstr "ਅਸੀਂ ਕੌਣ ਹਾਂ"
+
+msgid "Message Archive"
+msgstr "ਸੁਨੇਹਾ ਆਰਕਾਈਵ"
